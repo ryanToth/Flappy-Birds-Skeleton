@@ -88,11 +88,10 @@ public class GameFrame extends JPanel implements ActionListener {
                 
                 if (!gameStart && code == e.VK_R) try {
                     resetHighScore();
-                } catch (UnsupportedEncodingException ex) {
-                    Logger.getLogger(GameFrame.class.getName()).log(Level.SEVERE, null, ex);
-                } catch (IOException ex) {
-                    Logger.getLogger(GameFrame.class.getName()).log(Level.SEVERE, null, ex);
-                }
+                } catch (Exception ex) {
+                    //Logger.getLogger(GameFrame.class.getName()).log(Level.SEVERE, null, ex);
+                    highScore = 0;
+                } 
             }
 
         });
@@ -167,12 +166,15 @@ public class GameFrame extends JPanel implements ActionListener {
     public void actionPerformed(ActionEvent e) {
         
         try {
-            highScore = loadHighScore();
-        } catch (UnsupportedEncodingException ex) {
-            Logger.getLogger(GameFrame.class.getName()).log(Level.SEVERE, null, ex);
-        } catch (IOException ex) {
-            Logger.getLogger(GameFrame.class.getName()).log(Level.SEVERE, null, ex);
-        }
+            int tmp = loadHighScore();
+            
+            if (tmp > highScore) highScore = tmp;
+        } catch (Exception ex) {
+            //Logger.getLogger(GameFrame.class.getName()).log(Level.SEVERE, null, ex);
+            if (score > highScore) {
+                highScore = score;
+            }
+        } 
         
         if (bird != null) {
             
@@ -192,11 +194,10 @@ public class GameFrame extends JPanel implements ActionListener {
                     if (score > highScore) 
                         try {
                             setHighScore();
-                    } catch (UnsupportedEncodingException ex) {
-                        Logger.getLogger(GameFrame.class.getName()).log(Level.SEVERE, null, ex);
-                    } catch (IOException ex) {
-                        Logger.getLogger(GameFrame.class.getName()).log(Level.SEVERE, null, ex);
-                    }
+                    } catch (Exception ex) {
+                        //Logger.getLogger(GameFrame.class.getName()).log(Level.SEVERE, null, ex);
+                        highScore = score;
+                    } 
                 }
                 if (pipes.get(i).didHit(bird.bounds)) {
                     timePassedSincePipe = System.currentTimeMillis();
