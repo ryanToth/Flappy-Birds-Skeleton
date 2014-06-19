@@ -44,7 +44,6 @@ public class GameFrame extends JPanel implements ActionListener {
     int highScore = 0;
     MovingGround ground1;
     MovingGround ground2;
-    private String highscore;
 
     public GameFrame() throws UnsupportedEncodingException, IOException {
 
@@ -74,11 +73,14 @@ public class GameFrame extends JPanel implements ActionListener {
                 int code = e.getKeyCode();
                 
                 if (code == e.VK_SPACE && !gameStart && System.currentTimeMillis() - timePassedSincePipe > 1000) {
+                    
                     gameStart = true;
                     bird = new Bird(t,width/4,(height-height/5)/2,height/5*4);
                     score = 0;
                     pipes = new LinkedList<>();
                     timePassedSincePipe = System.currentTimeMillis() + 500;
+                    bird.gameStart = true;
+                    
                 }
                 
                 if (bird != null && gameStart)

@@ -16,7 +16,6 @@ import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.awt.event.KeyEvent;
 import java.awt.event.KeyListener;
-import java.awt.geom.Ellipse2D;
 import java.net.URL;
 import javax.swing.Timer;
 
@@ -38,6 +37,9 @@ public class Bird implements ActionListener, KeyListener {
     Image flying1;
     Image falling1;
     Image falling2;
+    Image start;
+    boolean gameStart = false;
+    long startingPose = 0;
     
     public Bird(Timer t, double x, double y, double maxY) {
         this.t = t;
@@ -56,6 +58,9 @@ public class Bird implements ActionListener, KeyListener {
         imageurl = getClass().getResource("/flappybirds/falling 2.png");
         falling2 = Toolkit.getDefaultToolkit().getImage(imageurl);
         
+        imageurl = getClass().getResource("/flappybirds/starting pose.png");
+        start = Toolkit.getDefaultToolkit().getImage(imageurl);
+        
         bounds = new Rectangle[] {new Rectangle((int)x+31,(int)y+10,5,30),new Rectangle((int)x+36,(int)y+12,5,26),
                     new Rectangle((int)x+41,(int)y+8,5,20),new Rectangle((int)x+47,(int)y+15,3,10),
                     new Rectangle((int)x+10,(int)y+20,20,10),new Rectangle((int)x+8,(int)y+30,20,10)};
@@ -67,7 +72,11 @@ public class Bird implements ActionListener, KeyListener {
         
         g2.setColor(Color.CYAN);
         
-        if (!dropping1 && !dropping2)
+        if (startingPose != 0 && !dead) {
+            g2.drawImage(start,(int) x,(int) y, (int)width-12,(int) height+10, null);
+        }
+        
+        else if (!dropping1 && !dropping2)
             //g2.fill(new Ellipse2D.Double((int)x, (int)y,(int) width, (int)height));
             g2.drawImage(flying1,(int) x,(int) y, (int)width,(int) height, null);
         
@@ -87,6 +96,15 @@ public class Bird implements ActionListener, KeyListener {
     public void actionPerformed(ActionEvent e) {
 
         vely = 0.002*(System.currentTimeMillis() - time) - 1;
+        
+        if (gameStart) {
+            gameStart = false;
+            startingPose = System.currentTimeMillis();
+        }
+        
+        if (System.currentTimeMillis() - startingPose > 2000) {
+            startingPose = 0;
+        }
         
         if (System.currentTimeMillis() - time > 1000) dropping1 = true;
         else dropping1 = false;
